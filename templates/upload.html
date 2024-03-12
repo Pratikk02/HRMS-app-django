@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+
+    .sidebar {
+        width: 250px;
+        height: 100%;
+        background-color: #333;
+        position: fixed;
+        left: 0;
+        top: 0;
+        padding-top: 20px;
+        color: #fff;
+        /* z-index: -9; */
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar ul li {
+        padding: 10px;
+        transition: background-color 0.3s;
+        cursor: pointer;
+        border-bottom: 1px solid #555;
+    }
+
+    .sidebar ul li:hover {
+        background-color: #555;
+    }
+
+    .sidebar ul li:first-child {
+        border-bottom: none;
+        text-align: center;
+    }
+
+    .sidebar ul li:last-child {
+        border-bottom: none;
+    }
+
+    .sidebar ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .sidebar ul li a:hover {
+        color: #ccc;
+    }
+
+    .content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+
+    .message {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px;
+        background-color: #eee;
+    }
+
+    .user-details {
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .dropbtn {
+        border: none;
+    }
+
+    .dropbtn img {
+        background-color: #eee;
+        padding: 5px;
+        cursor: pointer;
+        width: 10px;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        min-width: 120px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: #333;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f9f9f9;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .logout-btn {
+        background-color: #dc3545;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .logout-btn a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .logout-btn:hover {
+        background-color: #c82333;
+    }
+
+    .employee-details {
+        text-align: left;
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .employee-details h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .detail-item {
+        margin-bottom: 20px;
+    }
+
+    .detail-item label {
+        font-weight: bold;
+        display: block;
+        width: 200px;
+    }
+
+    .detail-item p {
+        margin: 0;
+    }
+
+    .logo img {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+    }
+
+    .message {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+        margin-bottom: 20px;
+    }
+
+    button[type="submit"] {
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+   
+</style>
+
+<body>
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="{% url 'home' %}"><img src="/static/company_logo.png" alt="Company Logo" class="logo"></a>
+            </li>
+            <li><a href="{% url 'emp_detail' %}">Employee Details</a></li>
+            <li><a href="{% url 'leave' %}">Leave Management</a></li>
+            <li><a href="{% url 'master_list' %}">Master List</a></li>
+            <li><a href="{% url 'upload' %}">Upload Files</a></li>
+            <li><a href="{% url 'change_pass' %}">Change Password</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div class="user-details">
+                <span> Logged In: {{data.name}} ({{data.emp_code}})</span>
+                <div class="dropdown">
+                    <button class="dropbtn"><img src="/static/drop-down-arrow.png" alt="V"></button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'emp_detail'  %}">Profile</a>
+                    </div>
+                </div>
+                <button class="logout-btn"><a href="{% url 'logout' %}">Logout</a></button>
+            </div>
+        </div>
+        <div class="employee-details">
+            <h1>Employee Details</h1>
+            <div class="detail-item">
+                <label>Name:</label>
+                <p>{{ data.name }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Employee ID:</label>
+                <p>{{ data.emp_code }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Email:</label>
+                <p>{{ data.email }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Department:</label>
+                <p>{{ data.department }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Contact Number:</label>
+                <p>{{ data.mobile_number }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Birth Date:</label>
+                <p>{{ data.birth_date }}</p>
+            </div>
+            <div class="detail-item">
+                <label>Country</label>
+                <p>{{ data.country }}</p>
+            </div>
+            <div class="detail-item">
+                <label>State:</label>
+                <p>{{ data.state }}</p>
+            </div>
+        </div>
+        <form action="{% url 'fupload' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="message">
+                {% for msg in messages %}
+                {{ msg }}
+                {% endfor %}
+            </div>
+            <input type="file" name="fn" multiple>
+            <button type="submit">Upload Files</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .container {
+        width: 450px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+        border-color: #1e90ff;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #1e90ff;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0d73db;
+    }
+
+    .message {
+        text-align: center;
+    }
+
+</style>
+
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form action="{% url 'create_new' %}" method="POST">
+            {% csrf_token %}
+            <div class="message">
+                {% for msg in messages %}
+                {{ msg }}
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <input type="number" placeholder="Employee Code" name="empcode" required>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Full Name" name="name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email ID" name="email" required>
+            </div>
+            <div class="form-group">
+                <input type="date" placeholder="Birth Date" name="birthdt" required>
+            </div>
+            <div class="form-group">
+                <input type="number" placeholder="Mobile Number" name="mobile" required>
+            </div>
+            <div class="form-group">
+                <input list="genderList" name="gender" placeholder="Select Gender" required>
+                <datalist id="genderList">
+                    <option value="Male">
+                    <option value="Female">
+                    <option value="Others">
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Department" name="dept" required>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Country" name="country" required>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="State" name="state" required>
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Pincode" name="pincode" required>
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Confirm Password" name="re_password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+
+</html>

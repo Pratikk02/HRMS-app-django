@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Leave</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-top: 20px;
+            color: #fff;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            padding: 10px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #555;
+        }
+
+        .sidebar ul li:first-child {
+            border-bottom: none;
+            text-align: center;
+        }
+
+        .sidebar ul li:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .sidebar ul li a:hover {
+            color: #ccc;
+        }
+
+        .message {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+            background-color: #eee;
+        }
+
+        .user-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .dropbtn {
+            border: none;
+        }
+
+        .dropbtn img {
+            background-color: #eee;
+            padding: 5px;
+            cursor: pointer;
+            width: 10px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f9f9f9;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .leave-form {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .leave-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="{% url 'home' %}"><img src="/static/company_logo.png" alt="Company Logo" class="logo"
+                        style="background-size: 50px;"></a>
+            </li>
+            <li><a href="{% url 'emp_detail' %}">Employee Details</a></li>
+            <li><a href="{% url 'leave' %}">Leave Management</a></li>
+            <li><a href="{% url 'master_list' %}">Master List</a></li>
+            <li><a href="{% url 'upload' %}">Upload Files</a></li>
+            <li><a href="{% url 'change_pass' %}">Change Password</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="message">
+            {% for msg in messages %}
+            {{ msg }}
+            {% endfor %}
+        </div>
+        <div class="header">
+            <div class="user-details">
+                <span>
+                    Logged In: {{data.name}} ({{data.emp_code}})
+                </span>
+                <div class="dropdown">
+                    <button class="dropbtn"><img src="/static/drop-down-arrow.png" alt="V"></button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'emp_detail'  %}">Profile</a>
+                    </div>
+                </div>
+                <button class="logout-btn"><a href="{% url 'logout' %}">Logout</a></button>
+            </div>
+        </div>
+        <div class="leave-form">
+            <h2>Request Leave</h2>
+            <form action="{% url 'issue' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" name="start-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" name="end-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="leave-type">Type of Leave:</label>
+                    <select name="leave-type" required>
+                        <option value="full">Full</option>
+                        <option value="half">Half</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reason">Reason:</label>
+                    <textarea name="reason" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
