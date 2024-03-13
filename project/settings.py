@@ -126,6 +126,17 @@ USE_I18N = True
 USE_TZ = True
 
 
+#Settings for AWS S3 Bucket
+AWS_ACCESS_KEY_ID = 'AKIAZ52R7I5QN2XPMOFW'
+AWS_SECRET_ACCESS_KEY = 'sa1HDmUS2M0NeEk73ERPRR1rIZCx1WB/JrxfzsQU'
+AWS_STORAGE_BUCKET_NAME = 'hrms-files'
+AWS_S3_REGION_NAME = 'Asia Pacific (Mumbai) ap-south-1'  # Optional, if your bucket is in a specific region
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIA_URL = f'http://hrms-files.s3-website.ap-south-1.amazonaws.com/media/'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -134,10 +145,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = "static",
 
 # Specify the directory where uploaded files will be stored.
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Specify the URL for serving media files during development.
-MEDIA_URL = "media/"
+# MEDIA_URL = "media/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
