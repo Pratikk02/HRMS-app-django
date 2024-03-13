@@ -151,29 +151,52 @@ def upload(request):
     context = {'data': data}
     return render(request,'upload.html', context)
 
+def upload_file_to_s3(file_obj, bucket_name, file_name):
+    s3_client = boto3.client('s3')
+    try:
+        s3_client.upload_fileobj(file_obj, bucket_name, file_name)
+        return True
+    except Exception as e:
+        print(f"Error uploading file to S3: {e}")
+        return False
 
 @login_required(login_url='login')
 def fupload(request):
-    ecode = request.session.get('ecode')
-    data = Emp.objects.get(emp_code=ecode)
-
-    if request.method == "POST":
-        files = request.FILES.getlist('fn')
-        if files:
-            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'uploads', ecode))
-
-            for file in files:
-                data.file = file
-                data.save()
-                
-                fs.save(file.name, file)
-
-            messages.success(request, "Files uploaded successfully!")
-
-            return redirect('upload')
+    if request.method == 'POST' and request.FILES.get('file'):
+        file_obj = request.FILES['file']
+        file_name = file_obj.name
+        bucket_name = 'hrms-files'
+        if upload_file_to_s3(file_obj, bucket_name, file_name):
+            # File uploaded successfully to S3
+            # You can save any necessary information about the file to your database
+            return HttpResponse('File uploaded successfully to S3!')
+        else:
+            return HttpResponse('Failed to upload file to S3!')
     else:
-        messages.error(request, 'Not logged in..!')
-        return redirect('login')
+        return HttpResponse('No file found to upload!')
+
+# @login_required(login_url='login')
+# def fupload(request):
+#     ecode = request.session.get('ecode')
+#     data = Emp.objects.get(emp_code=ecode)
+
+#     if request.method == "POST":
+#         files = request.FILES.getlist('fn')
+#         if files:
+#             fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'uploads', ecode))
+
+#             for file in files:
+#                 data.file = file
+#                 data.save()
+                
+#                 fs.save(file.name, file)
+
+#             messages.success(request, "Files uploaded successfully!")
+
+#             return redirect('upload')
+#     else:
+#         messages.error(request, 'Not logged in..!')
+#         return redirect('login')
     
 
 @login_required(login_url='login')
