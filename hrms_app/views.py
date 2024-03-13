@@ -169,7 +169,8 @@ def fupload(request):
         if upload_file_to_s3(file_obj, bucket_name, file_name):
             # File uploaded successfully to S3
             # You can save any necessary information about the file to your database
-            return HttpResponse('File uploaded successfully to S3!')
+            messages.success(request, 'File uploaded Successfully to S3 Bucket!!')
+            return redirect('upload')
         else:
             return HttpResponse('Failed to upload file to S3!')
     else:
